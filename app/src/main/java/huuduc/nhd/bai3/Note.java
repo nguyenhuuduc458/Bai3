@@ -13,23 +13,27 @@ public class Note implements Comparable<Note>{
     private String title;
     private String content;
     private Date date = new Date();
+    private int id;
 
-    public final static String TITLE = "title";
-    public final static String CONTENT = "content";
+    public final static String TITLE    = "title";
+    public final static String CONTENT  = "content";
     public final static String POSITION = "position";
-    public final static String DATE = "date";
+    public final static String DATE     = "date";
+    public final static String ID       = "id";
+
     public final static SimpleDateFormat FORMAT = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
 
     public Note(){}
 
-    public Note(String title, String content, Date date){
-        this.title = title;
+    public Note(int id, String title, String content, Date date){
+        this.title   = title;
         this.content = content;
-        this.date = date;
+        this.date    = date;
+        this.id      = id;
     }
 
     public Note(Intent intent){
-        this.title = intent.getStringExtra(Note.TITLE);
+        this.title   = intent.getStringExtra(Note.TITLE);
         this.content = intent.getStringExtra(Note.CONTENT);
         try {
             this.date = Note.FORMAT.parse(intent.getStringExtra(Note.DATE));
@@ -51,6 +55,10 @@ public class Note implements Comparable<Note>{
 
     public Date getDate(){return this.date;}
 
+    public int getId(){return this.id;}
+
+    public void setId(int id){ this.id = id;}
+
     public void setDate(Date date){this.date = date;}
 
     public static void packageIntent(Intent intent, String title, String content, String date){
@@ -59,11 +67,15 @@ public class Note implements Comparable<Note>{
         intent.putExtra(Note.DATE, date);
     }
 
-    public static void packageIntent(Intent intent,String title, String content, int position){
+    public static void packageIntent(Intent intent,int id, String title, String content,Date date, int position){
         intent.putExtra(Note.TITLE, title);
         intent.putExtra(Note.CONTENT, content);
-        intent.putExtra(Note.POSITION, String.valueOf(position));
+        intent.putExtra(Note.POSITION,String.valueOf(position));
+        intent.putExtra(Note.DATE,Note.FORMAT.format(date));
+        intent.putExtra(Note.ID, String.valueOf(id));
     }
+
+
     public String toLog(){
         return "Title: " + this.title  + " " +  "Content: " + this.content + "Last Modified: " + Note.FORMAT.format(this.date);
     }

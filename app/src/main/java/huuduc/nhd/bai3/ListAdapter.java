@@ -12,28 +12,42 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
+
 
 public class ListAdapter extends BaseAdapter {
-    private final List<Note> items = new ArrayList<>();
+    private List<Note> originalList = new ArrayList<>();
+    private List<Note> items    = new ArrayList<>();
     private final Context mContext;
-    private final List<Note> filterArray = new ArrayList<>();
-    CreateXMLFile xml = new CreateXMLFile();
+    private int selectedPosition;
 
     public ListAdapter(Context context){
         mContext = context;
     }
 
     public void add(Note note){
+        note.setId(createIDForItem());
         items.add(note);
-        filterArray.add(note);
+        originalList.add(note);
         notifyDataSetChanged();
         Toast.makeText(mContext, "Add successfully ", Toast.LENGTH_SHORT).show();
     }
+
     public void addRange(List<Note> notes){
-       items.addAll(notes);
-       filterArray.addAll(notes);
-       notifyDataSetChanged();
+        if(items == null || items.size() == 0)
+            items = new ArrayList<>();
+        for(int i=0; i<notes.size() ;i++)
+            items.add(notes.get(i));
+    }
+
+    public void setRawList(List<Note> notes){
+        if(originalList == null || originalList.size() == 0)
+            originalList = new ArrayList<>();
+        for(int i=0; i<notes.size() ;i++)
+            originalList.add(notes.get(i));
+    }
+
+    public void saveChange(){
+        notifyDataSetChanged();
     }
 
     public void clear(){
@@ -43,7 +57,6 @@ public class ListAdapter extends BaseAdapter {
 
     public void clearItem(int pos){
         items.remove(pos);
-        filterArray.remove(pos);
         notifyDataSetChanged();
         Toast.makeText(mContext, "Item in " + pos + " position has been removed", Toast.LENGTH_SHORT).show();
     }
@@ -60,6 +73,11 @@ public class ListAdapter extends BaseAdapter {
         return this.items;
     }
 
+
+    public List<Note> getOriginalList() {
+        return originalList;
+    }
+    
     @Override
     public int getCount() {
         return items.size();
@@ -110,16 +128,24 @@ public class ListAdapter extends BaseAdapter {
     public void filter(String text){
         items.clear();
         if(text.length() == 0){
-            addRange(filterArray);
-            notifyDataSetChanged();
+            addRange(originalList);
         }else{
-            for(Note item : this.filterArray){
-                if(item.getTitle().toLowerCase().contains(text.toLowerCase())){
+            for(Note item : this.originalList){
+                if(item.getTitle().toLowerCase().contains(text.toLowerCase()) || item.getContent().toLowerCase().contains(text.toLowerCase())){
                     items.add(item);
                 }
             }
         }
-        notifyDataSetChanged();
+        saveChange();
     }
 
+    public int createIDForItem(){
+        int max = items.get(0).getId();
+        for(int i = 0 ;i < items.size();i++){
+            if(items.get(i).getId() > max){
+                max = items.get(i).getId();
+            }
+        }
+        return max + 1;
+    }
 }

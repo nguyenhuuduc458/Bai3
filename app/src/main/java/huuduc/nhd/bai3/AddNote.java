@@ -19,6 +19,7 @@ public class AddNote extends Activity {
     private EditText mTitleText, mContentText;
     private Button mResetButton, mSubmitButton, mCancelButton;
     private int edit_position = 0;
+    private int id = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +58,7 @@ public class AddNote extends Activity {
                     Intent intent = new Intent();
                     Note.packageIntent(intent,title,content,getCurrentDate());
                     if(editData()){
+                        intent.putExtra(Note.ID,String.valueOf(id));
                         intent.putExtra(Note.POSITION,String.valueOf(edit_position));
                     }
                     setResult(RESULT_OK,intent);
@@ -66,6 +68,7 @@ public class AddNote extends Activity {
         });
 
         editData();
+
     }
     private void maping(){
         mTitleText    = (EditText) findViewById(R.id.title);
@@ -76,19 +79,15 @@ public class AddNote extends Activity {
     }
 
     private boolean editData(){
-       try{
-           Intent data = getIntent();
-           if(data != null){
-               Note note = new Note(data);
-               mTitleText.setText(note.getTitle());
-               mContentText.setText(note.getContent());
-               edit_position = Integer.parseInt(data.getStringExtra(Note.POSITION));
-               return true;
-           }else{
-               return false;
-           }
-       }catch(NumberFormatException e){
-           e.printStackTrace();
+       Intent data = getIntent();
+       if(data.getStringExtra(Note.ID) != null){
+           Note note = new Note(data);
+           mTitleText.setText(note.getTitle());
+           mContentText.setText(note.getContent());
+           edit_position = Integer.parseInt(data.getStringExtra(Note.POSITION));
+           id = note.getId();
+           return true;
+       }else{
            return false;
        }
     }

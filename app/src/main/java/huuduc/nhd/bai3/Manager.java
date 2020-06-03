@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -159,13 +160,15 @@ public class Manager extends ListActivity implements SearchView.OnQueryTextListe
 
     protected void saveFileXML(){
         CreateXMLFile xml = new CreateXMLFile();
-        xml.saveXMLFile(mAdapter.getAllListNote());
+        xml.saveXMLFile(mAdapter.getOriginalList());
     }
 
     protected void loadItems(){
         CreateXMLFile xml = new CreateXMLFile();
-        mAdapter.addRange(xml.loadXMLFile());
-        setListAdapter(mAdapter);
+        List<Note> list = xml.loadXMLFile();
+        mAdapter.addRange(list);
+        mAdapter.setRawList(list);
+        mAdapter.saveChange();
     }
 
     protected void deleteItem(final MenuItem item){
@@ -193,7 +196,7 @@ public class Manager extends ListActivity implements SearchView.OnQueryTextListe
         Intent intent = new Intent(this, AddNote.class);
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         Note note = (Note) mAdapter.getItem(info.position);
-        Note.packageIntent(intent,note.getTitle(), note.getContent(),info.position);
+        Note.packageIntent(intent,note.getId(),note.getTitle(), note.getContent(),note.getDate(),info.position);
         startActivityForResult(intent,EDIT_ITEM_REQUEST);
     }
 
@@ -212,5 +215,6 @@ public class Manager extends ListActivity implements SearchView.OnQueryTextListe
         }
         setListAdapter(mAdapter);
     }
+
 
 }

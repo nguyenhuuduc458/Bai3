@@ -43,7 +43,11 @@ public class CreateXMLFile {
 
                 Element note = document.createElement("note");
 
-                note.setAttribute("title",items.get(i).getTitle());
+                note.setAttribute("id",String.valueOf(items.get(i).getId()));
+
+                Element title = document.createElement("title");
+                title.appendChild(document.createTextNode(items.get(i).getTitle()));
+                note.appendChild(title);
 
                 Element content = document.createElement("content");
                 content.appendChild(document.createTextNode(items.get(i).getContent()));
@@ -80,6 +84,7 @@ public class CreateXMLFile {
         String title   = null;
         String content = null;
         String date    = null;
+        int id;
         try {
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder               = documentBuilderFactory.newDocumentBuilder();
@@ -94,14 +99,14 @@ public class CreateXMLFile {
                 Node node = list.item(i);
                 if(node instanceof Element){
                     Element element = (Element) node;
-                    title = element.getAttribute("title");
 
-                    NodeList listChild = element.getElementsByTagName("content");
-                    content = listChild.item(0).getTextContent();
+                    id = Integer.parseInt(element.getAttribute("id"));
+                    title   = element.getElementsByTagName("title").item(0).getTextContent();
+                    content =  element.getElementsByTagName("content").item(0).getTextContent();
+                    date    =  element.getElementsByTagName("date").item(0).getTextContent();
 
-                    NodeList dateChild = element.getElementsByTagName("date");
-                    date = dateChild.item(0).getTextContent();
-                    item = new Note(title,content,Note.FORMAT.parse(date));
+                    item    = new Note(id,title,content,Note.FORMAT.parse(date));
+
                     items.add(item);
                 }
             }
