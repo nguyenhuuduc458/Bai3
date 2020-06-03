@@ -165,7 +165,6 @@ public class Manager extends ListActivity implements SearchView.OnQueryTextListe
     protected void loadItems(){
         CreateXMLFile xml = new CreateXMLFile();
         mAdapter.addRange(xml.loadXMLFile());
-        mAdapter.addRangeForFilter(xml.loadXMLFile());
         setListAdapter(mAdapter);
     }
 

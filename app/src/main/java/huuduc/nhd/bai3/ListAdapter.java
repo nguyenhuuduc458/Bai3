@@ -18,6 +18,7 @@ public class ListAdapter extends BaseAdapter {
     private final List<Note> items = new ArrayList<>();
     private final Context mContext;
     private final List<Note> filterArray = new ArrayList<>();
+    CreateXMLFile xml = new CreateXMLFile();
 
     public ListAdapter(Context context){
         mContext = context;
@@ -25,11 +26,13 @@ public class ListAdapter extends BaseAdapter {
 
     public void add(Note note){
         items.add(note);
+        filterArray.add(note);
         notifyDataSetChanged();
         Toast.makeText(mContext, "Add successfully ", Toast.LENGTH_SHORT).show();
     }
     public void addRange(List<Note> notes){
        items.addAll(notes);
+       filterArray.addAll(notes);
        notifyDataSetChanged();
     }
 
@@ -40,6 +43,7 @@ public class ListAdapter extends BaseAdapter {
 
     public void clearItem(int pos){
         items.remove(pos);
+        filterArray.remove(pos);
         notifyDataSetChanged();
         Toast.makeText(mContext, "Item in " + pos + " position has been removed", Toast.LENGTH_SHORT).show();
     }
@@ -106,7 +110,8 @@ public class ListAdapter extends BaseAdapter {
     public void filter(String text){
         items.clear();
         if(text.length() == 0){
-            items.addAll(this.filterArray);
+            addRange(filterArray);
+            notifyDataSetChanged();
         }else{
             for(Note item : this.filterArray){
                 if(item.getTitle().toLowerCase().contains(text.toLowerCase())){
@@ -117,7 +122,4 @@ public class ListAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    public void addRangeForFilter(List<Note> items){
-        filterArray.addAll(items);
-    }
 }

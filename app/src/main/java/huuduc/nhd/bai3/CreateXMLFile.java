@@ -59,8 +59,8 @@ public class CreateXMLFile {
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer               = transformerFactory.newTransformer();
             DOMSource source                      = new DOMSource(document);
-//            StreamResult result                   = new StreamResult(new File("/data/user/0/huuduc.nhd.bai3/files/note.xml"));
-          StreamResult result                   = new StreamResult(new File("/sdcard/Android/data/huuduc.nhd.bai3/files/note.xml"));
+            StreamResult result                   = new StreamResult(new File("/data/user/0/huuduc.nhd.bai3/files/note.xml"));
+//          StreamResult result                   = new StreamResult(new File("/sdcard/Android/data/huuduc.nhd.bai3/files/note.xml"));
 
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
@@ -84,8 +84,8 @@ public class CreateXMLFile {
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder               = documentBuilderFactory.newDocumentBuilder();
 
-//            Document document   = documentBuilder.parse(new File("/data/user/0/huuduc.nhd.bai3/files/note.xml"));
-          Document document   = documentBuilder.parse(new File("/sdcard/Android/data/huuduc.nhd.bai3/files/note.xml"));
+            Document document   = documentBuilder.parse(new File("/data/user/0/huuduc.nhd.bai3/files/note.xml"));
+//          Document document   = documentBuilder.parse(new File("/sdcard/Android/data/huuduc.nhd.bai3/files/note.xml"));
 
             Element root  = document.getDocumentElement();
             NodeList list = root.getChildNodes();
