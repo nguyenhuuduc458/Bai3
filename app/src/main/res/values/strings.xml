@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Bai3</string>
+    <string name="add_note">Add new note</string>
+    <string name="lable_title">Title</string>
+    <string name="lable_content">Content</string>
+    <string name="hint_title">Enter title... </string>
+    <string name="hint_content">Enter content...</string>
+    <string name="submit_button">Submit</string>
+    <string name="reset_button">Reset</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="search_hint">Search...</string>
+</resources>
