@@ -7,10 +7,8 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,41 +33,22 @@ public class CreateXMLFile {
             DocumentBuilder documentBuilder = factory.newDocumentBuilder();
             Document document               = documentBuilder.newDocument();
 
-            // root element
             Element root = document.createElement("notes");
             document.appendChild(root);
 
             for(int i = 0 ; i < items.size(); i++){
 
                 Element note = document.createElement("note");
-
                 note.setAttribute("id",String.valueOf(items.get(i).getId()));
 
-                Element title = document.createElement("title");
-                title.appendChild(document.createTextNode(items.get(i).getTitle()));
-                note.appendChild(title);
-
-                Element content = document.createElement("content");
-                content.appendChild(document.createTextNode(items.get(i).getContent()));
-                note.appendChild(content);
-
-                Element date = document.createElement("date");
-                date.appendChild(document.createTextNode(Note.FORMAT.format(items.get(i).getDate())));
-                note.appendChild(date);
+                createElement(document,items,"title",note,i);
+                createElement(document,items,"content",note, i);
+                createElement(document,items,"date",note, i);
 
                 root.appendChild(note);
             }
 
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer               = transformerFactory.newTransformer();
-            DOMSource source                      = new DOMSource(document);
-            StreamResult result                   = new StreamResult(new File("/data/user/0/huuduc.nhd.bai3/files/note.xml"));
-//          StreamResult result                   = new StreamResult(new File("/sdcard/Android/data/huuduc.nhd.bai3/files/note.xml"));
-
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-            transformer.transform(source,result);
-
+            tranformDOMToXML(document);
 
         } catch (ParserConfigurationException pce) {
             pce.printStackTrace();
@@ -90,7 +69,6 @@ public class CreateXMLFile {
             DocumentBuilder documentBuilder               = documentBuilderFactory.newDocumentBuilder();
 
             Document document   = documentBuilder.parse(new File("/data/user/0/huuduc.nhd.bai3/files/note.xml"));
-//          Document document   = documentBuilder.parse(new File("/sdcard/Android/data/huuduc.nhd.bai3/files/note.xml"));
 
             Element root  = document.getDocumentElement();
             NodeList list = root.getChildNodes();
@@ -110,6 +88,7 @@ public class CreateXMLFile {
                     items.add(item);
                 }
             }
+
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         } catch (FileNotFoundException e) {
@@ -121,6 +100,40 @@ public class CreateXMLFile {
         }finally {
             return items;
         }
+    }
+
+    public void createElement(Document document,List<Note> items, String nameOfElement, Element parent, int position)
+    {
+        Element name = document.createElement(nameOfElement);
+        switch (nameOfElement){
+            case "title" : {
+                name.appendChild(document.createTextNode(items.get(position).getTitle()));
+                break;
+            }
+            case "content":{
+                name.appendChild(document.createTextNode(items.get(position).getContent()));
+                break;
+            }
+            case "date":{
+                name.appendChild(document.createTextNode(Note.FORMAT.format(items.get(position).getDate())));
+                break;
+            }
+        }
+        parent.appendChild(name);
+
+    }
+
+    public void tranformDOMToXML(Document document) throws TransformerException {
+
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer               = transformerFactory.newTransformer();
+        DOMSource source                      = new DOMSource(document);
+        StreamResult result                   = new StreamResult(new File("/data/user/0/huuduc.nhd.bai3/files/note.xml"));
+
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+        transformer.transform(source,result);
+
     }
 
 }

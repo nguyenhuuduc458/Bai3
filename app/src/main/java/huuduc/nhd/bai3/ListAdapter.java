@@ -16,9 +16,8 @@ import java.util.List;
 
 public class ListAdapter extends BaseAdapter {
     private List<Note> originalList = new ArrayList<>();
-    private List<Note> items    = new ArrayList<>();
+    private List<Note> items        = new ArrayList<>();
     private final Context mContext;
-    private int selectedPosition;
 
     public ListAdapter(Context context){
         mContext = context;
@@ -77,7 +76,7 @@ public class ListAdapter extends BaseAdapter {
     public List<Note> getOriginalList() {
         return originalList;
     }
-    
+
     @Override
     public int getCount() {
         return items.size();
