@@ -1,2 +1,2 @@
-#Bai3
-Create note app on android 
+# Android app
+Create note app on android
