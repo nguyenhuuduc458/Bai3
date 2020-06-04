@@ -16,18 +16,23 @@ import java.util.List;
 
 public class ListAdapter extends BaseAdapter {
     private List<Note> originalList = new ArrayList<>();
-    private List<Note> items        = new ArrayList<>();
+    private List<Note> items;
     private final Context mContext;
 
-    public ListAdapter(Context context){
+
+    public ListAdapter(Context context, List<Note> items){
         mContext = context;
+        this.items = items;
     }
 
     public void add(Note note){
         note.setId(createIDForItem());
+       // originalList.add(note);
+      //  items.clear();
+        //items.addAll(originalList);
         items.add(note);
         originalList.add(note);
-        notifyDataSetChanged();
+        saveChange();
         Toast.makeText(mContext, "Add successfully ", Toast.LENGTH_SHORT).show();
     }
 
@@ -51,12 +56,14 @@ public class ListAdapter extends BaseAdapter {
 
     public void clear(){
         items.clear();
-        notifyDataSetChanged();
+        originalList.clear();
+        saveChange();
     }
 
     public void clearItem(int pos){
-        items.remove(pos);
-        notifyDataSetChanged();
+        originalList.remove(pos);
+        items.addAll(originalList);
+        saveChange();
         Toast.makeText(mContext, "Item in " + pos + " position has been removed", Toast.LENGTH_SHORT).show();
     }
 
@@ -64,7 +71,7 @@ public class ListAdapter extends BaseAdapter {
     public void editItem(int pos, Note note){
        items.get(pos).setContent(note.getContent());
        items.get(pos).setTitle(note.getTitle());
-       notifyDataSetChanged();
+       saveChange();
        Toast.makeText(mContext, "Edit successfully", Toast.LENGTH_SHORT).show();
     }
 
@@ -99,27 +106,28 @@ public class ListAdapter extends BaseAdapter {
     }
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        final ViewHolder viewHolder;
+        ViewHolder viewHolder;
         View row = view;
+        Note note = (Note) getItem(i);
 
         if(row == null) {
             row = LayoutInflater.from(mContext).inflate(R.layout.note,null);
 
             viewHolder = new ViewHolder();
-            Note note = (Note) getItem(i);
+            Log.i("dddd",note.getTitle());
 
             viewHolder.mTitle   = row.findViewById(R.id.showTitle);
             viewHolder.mContent = row.findViewById(R.id.showContent);
             viewHolder.mDate    = row.findViewById(R.id.showDate);
 
-            viewHolder.mTitle.setText(note.getTitle());
-            viewHolder.mContent.setText(note.getContent());
-            viewHolder.mDate.setText("Last modified: " + Note.FORMAT.format(note.getDate()));
-
             row.setTag(viewHolder);
         }else{
             viewHolder = (ViewHolder) row.getTag();
         }
+
+        viewHolder.mTitle.setText(note.getTitle());
+        viewHolder.mContent.setText(note.getContent());
+        viewHolder.mDate.setText("Last modified: " + Note.FORMAT.format(note.getDate()));
 
         return row;
     }
@@ -130,7 +138,8 @@ public class ListAdapter extends BaseAdapter {
             addRange(originalList);
         }else{
             for(Note item : this.originalList){
-                if(item.getTitle().toLowerCase().contains(text.toLowerCase()) || item.getContent().toLowerCase().contains(text.toLowerCase())){
+                if(item.getTitle().toLowerCase().contains(text.toLowerCase()) ||
+                        item.getContent().toLowerCase().contains(text.toLowerCase())){
                     items.add(item);
                 }
             }
@@ -139,12 +148,18 @@ public class ListAdapter extends BaseAdapter {
     }
 
     public int createIDForItem(){
-        int max = items.get(0).getId();
-        for(int i = 0 ;i < items.size();i++){
-            if(items.get(i).getId() > max){
-                max = items.get(i).getId();
+        if(originalList.size()<=0)
+            return 1;
+        int max = originalList.get(0).getId();
+        for(int i = 0 ;i < originalList.size();i++){
+            if(originalList.get(i).getId() > max){
+                max = originalList.get(i).getId();
             }
         }
         return max + 1;
+    }
+
+    public int getIndexOfItem(Note note){
+        return originalList.indexOf(note);
     }
 }

@@ -46,7 +46,7 @@ public class AddNote extends Activity {
         mSubmitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String title = mTitleText.getText().toString().trim();
+                String title   = mTitleText.getText().toString().trim();
                 String content = mContentText.getText().toString().trim();
                 if(title.equals("")){
                     Toast.makeText(getApplicationContext(), "Please enter title", Toast.LENGTH_SHORT).show();
@@ -104,4 +104,5 @@ public class AddNote extends Activity {
            return null;
        }
     }
+
 }

@@ -39,8 +39,6 @@ public class Note implements Comparable<Note>{
             this.date = Note.FORMAT.parse(intent.getStringExtra(Note.DATE));
         } catch (ParseException e) {
             e.printStackTrace();
-        } catch(Exception e){
-            e.printStackTrace();
         }
 
     }

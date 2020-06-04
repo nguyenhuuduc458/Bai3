@@ -1,5 +1,7 @@
 package huuduc.nhd.bai3;
 
+import android.os.Build;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -67,7 +69,6 @@ public class CreateXMLFile {
         try {
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder               = documentBuilderFactory.newDocumentBuilder();
-
             Document document   = documentBuilder.parse(new File("/data/user/0/huuduc.nhd.bai3/files/note.xml"));
 
             Element root  = document.getDocumentElement();
@@ -78,8 +79,8 @@ public class CreateXMLFile {
                 if(node instanceof Element){
                     Element element = (Element) node;
 
-                    id = Integer.parseInt(element.getAttribute("id"));
-                    title   = element.getElementsByTagName("title").item(0).getTextContent();
+                    id      = Integer.parseInt(element.getAttribute("id"));
+                    title   =  element.getElementsByTagName("title").item(0).getTextContent();
                     content =  element.getElementsByTagName("content").item(0).getTextContent();
                     date    =  element.getElementsByTagName("date").item(0).getTextContent();
 
@@ -119,9 +120,11 @@ public class CreateXMLFile {
                 break;
             }
         }
+
         parent.appendChild(name);
 
     }
+
 
     public void tranformDOMToXML(Document document) throws TransformerException {
 

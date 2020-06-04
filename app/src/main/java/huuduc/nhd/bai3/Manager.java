@@ -34,13 +34,14 @@ public class Manager extends ListActivity implements SearchView.OnQueryTextListe
     private static final int EDIT_ITEM_REQUEST = 1;
     private static final String TAG = "Note of user";
     private static sortType flag = sortType.ASC_NOTE;
+    private static ArrayList<Note> itemList = new ArrayList<>();
 
     ListAdapter mAdapter;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mAdapter = new ListAdapter(this);
+        mAdapter = new ListAdapter(this,itemList);
 
         setListAdapter(mAdapter);
 
@@ -51,6 +52,7 @@ public class Manager extends ListActivity implements SearchView.OnQueryTextListe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == RESULT_OK && requestCode == ADD_ITEM_REQUEST && data != null){
+            setListAdapter(mAdapter);
             Note note = new Note(data);
             mAdapter.add(note);
         }else if(resultCode == RESULT_OK && requestCode == EDIT_ITEM_REQUEST && data != null){
@@ -166,7 +168,8 @@ public class Manager extends ListActivity implements SearchView.OnQueryTextListe
     protected void loadItems(){
         CreateXMLFile xml = new CreateXMLFile();
         List<Note> list = xml.loadXMLFile();
-        mAdapter.addRange(list);
+        itemList.addAll(list);
+//        mAdapter.addRange(list);
         mAdapter.setRawList(list);
         mAdapter.saveChange();
     }
@@ -177,9 +180,14 @@ public class Manager extends ListActivity implements SearchView.OnQueryTextListe
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-                mAdapter.clearItem(info.position);
-                setListAdapter(mAdapter);
+
+                    AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+                    Note note = (Note) mAdapter.getItem(info.position);
+                    Log.d("itemIndex",String.valueOf(mAdapter.getIndexOfItem(note)));
+                    mAdapter.clearItem(mAdapter.getIndexOfItem(note));
+                    setListAdapter(mAdapter);
+                    refreshActivity();
+
             }
         });
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -209,12 +217,18 @@ public class Manager extends ListActivity implements SearchView.OnQueryTextListe
         if(flag == sortType.ASC_NOTE){
             flag = sortType.DESC_NOTE;
             Collections.sort(mAdapter.getAllListNote());
+//            Collections.sort(mAdapter.getOriginalList());
         }else if(flag ==  sortType.DESC_NOTE){
             flag = sortType.ASC_NOTE;
             Collections.sort(mAdapter.getAllListNote(), Collections.reverseOrder());
+//            Collections.sort(mAdapter.getOriginalList(),Collections.<Note>reverseOrder());
         }
         setListAdapter(mAdapter);
     }
 
-
+    public void refreshActivity(){
+        Intent refresh = new Intent(this,Manager.class);
+        startActivity(refresh);
+        finish();
+    }
 }
