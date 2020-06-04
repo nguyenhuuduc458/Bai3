@@ -169,7 +169,6 @@ public class Manager extends ListActivity implements SearchView.OnQueryTextListe
         CreateXMLFile xml = new CreateXMLFile();
         List<Note> list = xml.loadXMLFile();
         itemList.addAll(list);
-//        mAdapter.addRange(list);
         mAdapter.setRawList(list);
         mAdapter.saveChange();
     }
@@ -180,14 +179,10 @@ public class Manager extends ListActivity implements SearchView.OnQueryTextListe
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-
-                    AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-                    Note note = (Note) mAdapter.getItem(info.position);
-                    Log.d("itemIndex",String.valueOf(mAdapter.getIndexOfItem(note)));
-                    mAdapter.clearItem(mAdapter.getIndexOfItem(note));
-                    setListAdapter(mAdapter);
-                    refreshActivity();
-
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+            Note note = (Note) mAdapter.getItem(info.position);
+            mAdapter.clearItem(mAdapter.getIndexOfItem(note));
+            setListAdapter(mAdapter);
             }
         });
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -217,18 +212,11 @@ public class Manager extends ListActivity implements SearchView.OnQueryTextListe
         if(flag == sortType.ASC_NOTE){
             flag = sortType.DESC_NOTE;
             Collections.sort(mAdapter.getAllListNote());
-//            Collections.sort(mAdapter.getOriginalList());
         }else if(flag ==  sortType.DESC_NOTE){
             flag = sortType.ASC_NOTE;
             Collections.sort(mAdapter.getAllListNote(), Collections.reverseOrder());
-//            Collections.sort(mAdapter.getOriginalList(),Collections.<Note>reverseOrder());
         }
         setListAdapter(mAdapter);
     }
 
-    public void refreshActivity(){
-        Intent refresh = new Intent(this,Manager.class);
-        startActivity(refresh);
-        finish();
-    }
 }

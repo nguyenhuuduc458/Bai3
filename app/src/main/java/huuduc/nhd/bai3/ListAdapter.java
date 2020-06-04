@@ -27,9 +27,6 @@ public class ListAdapter extends BaseAdapter {
 
     public void add(Note note){
         note.setId(createIDForItem());
-       // originalList.add(note);
-      //  items.clear();
-        //items.addAll(originalList);
         items.add(note);
         originalList.add(note);
         saveChange();
