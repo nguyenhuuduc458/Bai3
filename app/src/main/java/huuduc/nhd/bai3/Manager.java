@@ -52,9 +52,9 @@ public class Manager extends ListActivity implements SearchView.OnQueryTextListe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == RESULT_OK && requestCode == ADD_ITEM_REQUEST && data != null){
-            setListAdapter(mAdapter);
             Note note = new Note(data);
             mAdapter.add(note);
+            setListAdapter(mAdapter);
         }else if(resultCode == RESULT_OK && requestCode == EDIT_ITEM_REQUEST && data != null){
             Note note = new Note(data);
             mAdapter.editItem(Integer.parseInt(data.getStringExtra(Note.POSITION)),note);
