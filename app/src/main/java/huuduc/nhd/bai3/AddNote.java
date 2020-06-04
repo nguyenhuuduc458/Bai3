@@ -56,12 +56,12 @@ public class AddNote extends Activity {
                     mContentText.requestFocus();
                 }else{
                     Intent intent = new Intent();
-                    Note.packageIntent(intent,title,content,getCurrentDate());
+                    Note.packageIntent(intent, title, content, getCurrentDate());
                     if(editData()){
-                        intent.putExtra(Note.ID,String.valueOf(id));
-                        intent.putExtra(Note.POSITION,String.valueOf(edit_position));
+                        intent.putExtra(Note.ID, String.valueOf(id));
+                        intent.putExtra(Note.POSITION, String.valueOf(edit_position));
                     }
-                    setResult(RESULT_OK,intent);
+                    setResult(RESULT_OK, intent);
                     finish();
                 }
             }
@@ -87,7 +87,7 @@ public class AddNote extends Activity {
            edit_position = Integer.parseInt(data.getStringExtra(Note.POSITION));
            id = note.getId();
            return true;
-       }else{
+       } else{
            return false;
        }
     }

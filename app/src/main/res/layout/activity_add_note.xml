@@ -12,9 +12,10 @@
         android:text="@string/lable_title"
         android:layout_marginTop="5dp"
         android:textColor="@color/BurlyWood"
-        android:textSize="15dp"
+        android:textSize="18dp"
         android:padding="5dp"
         android:layout_marginBottom="5dp"
+        android:textStyle="bold"
         />
 
     <EditText
@@ -37,8 +38,9 @@
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:textColor="@color/BurlyWood"
-        android:textSize="15dp"
+        android:textSize="18dp"
         android:padding="5dp"
+        android:textStyle="bold"
         />
 
     <EditText
@@ -51,6 +53,8 @@
         android:layout_marginBottom="5dp"
         android:backgroundTint="@color/BurlyWood"
         android:lines="10"
+        android:gravity="top"
+        android:hint="Enter content here"
         />
 
 

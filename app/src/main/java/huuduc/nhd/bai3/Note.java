@@ -2,12 +2,13 @@ package huuduc.nhd.bai3;
 
 import android.content.Intent;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class Note implements Comparable<Note>{
+public class Note implements Comparable<Note> {
     public static final String ITEM_SEP = System.getProperty("line.separator");
 
     private String title;

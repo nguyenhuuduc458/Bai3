@@ -35,31 +35,30 @@ public class Manager extends ListActivity implements SearchView.OnQueryTextListe
     private static final String TAG = "Note of user";
     private static sortType flag = sortType.ASC_NOTE;
     private static ArrayList<Note> itemList = new ArrayList<>();
-
     ListAdapter mAdapter;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mAdapter = new ListAdapter(this,itemList);
+        mAdapter = new ListAdapter(this, itemList);
 
         setListAdapter(mAdapter);
 
         registerForContextMenu(getListView());
-
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == RESULT_OK && requestCode == ADD_ITEM_REQUEST && data != null){
-            setListAdapter(mAdapter);
             Note note = new Note(data);
             mAdapter.add(note);
-        }else if(resultCode == RESULT_OK && requestCode == EDIT_ITEM_REQUEST && data != null){
-            Note note = new Note(data);
-            mAdapter.editItem(Integer.parseInt(data.getStringExtra(Note.POSITION)),note);
             setListAdapter(mAdapter);
-        }else {
+        } else if(resultCode == RESULT_OK && requestCode == EDIT_ITEM_REQUEST && data != null){
+            Note note = new Note(data);
+            mAdapter.editItem(Integer.parseInt(data.getStringExtra(Note.POSITION)), note);
+            setListAdapter(mAdapter);
+        } else {
             // do nothing in here
         }
     }
@@ -90,6 +89,7 @@ public class Manager extends ListActivity implements SearchView.OnQueryTextListe
         setListAdapter(mAdapter);
         return false;
     }
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch(item.getItemId()){
@@ -168,13 +168,18 @@ public class Manager extends ListActivity implements SearchView.OnQueryTextListe
     protected void loadItems(){
         CreateXMLFile xml = new CreateXMLFile();
         List<Note> list = xml.loadXMLFile();
-        itemList.addAll(list);
-        mAdapter.setRawList(list);
-        mAdapter.saveChange();
+        // display notice if there are no notes
+        if (list.size() == 0)
+            Toast.makeText(this, "You don't have any note", Toast.LENGTH_SHORT).show();
+        else {
+            itemList.addAll(list);
+            mAdapter.setRawList(list);
+            mAdapter.saveChange();
+        }
     }
 
     protected void deleteItem(final MenuItem item){
-        AlertDialog.Builder builder = new AlertDialog.Builder(Manager.this);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(Manager.this);
         builder.setMessage("Are you sure to delete item?");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
@@ -188,7 +193,7 @@ public class Manager extends ListActivity implements SearchView.OnQueryTextListe
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                finish();
+//                finish(); // hoăc chô này do nothing cung đư
             }
         });
         AlertDialog alert = builder.create();

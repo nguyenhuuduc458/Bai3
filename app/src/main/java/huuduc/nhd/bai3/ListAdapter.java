@@ -96,11 +96,6 @@ public class ListAdapter extends BaseAdapter {
         return i;
     }
 
-    public class ViewHolder{
-        TextView mTitle;
-        TextView mContent;
-        TextView mDate;
-    }
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         ViewHolder viewHolder;
@@ -158,5 +153,11 @@ public class ListAdapter extends BaseAdapter {
 
     public int getIndexOfItem(Note note){
         return originalList.indexOf(note);
+    }
+
+    public class ViewHolder{
+        TextView mTitle;
+        TextView mContent;
+        TextView mDate;
     }
 }
