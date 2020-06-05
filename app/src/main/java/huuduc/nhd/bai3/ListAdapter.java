@@ -34,15 +34,12 @@ public class ListAdapter extends BaseAdapter {
     }
 
     public void addRange(List<Note> notes){
-        if(items == null || items.size() == 0)
-            items = new ArrayList<>();
         for(int i=0; i<notes.size() ;i++)
             items.add(notes.get(i));
     }
 
     public void setRawList(List<Note> notes){
-        if(originalList == null || originalList.size() == 0)
-            originalList = new ArrayList<>();
+
         for(int i=0; i<notes.size() ;i++)
             originalList.add(notes.get(i));
     }

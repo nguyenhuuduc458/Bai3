@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Bai3</string>
+    <string name="app_name">NoteApp</string>
     <string name="add_note">Add new note</string>
     <string name="lable_title">Title</string>
     <string name="lable_content">Content</string>
